@@ -3,7 +3,7 @@ name: Internet Speedtest & Readme Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */3 * * *" # запуск каждые 3 часа
+    - cron: "0 * * * *" # запуск каждый час
 
 jobs:
   speedtest:
@@ -17,11 +17,14 @@ jobs:
       - name: Запустить speedtest и обновить README
         run: |
           python speedtest_update.py
+
       - name: Commit and push if README changed
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md
           git diff --cached --quiet || git commit -m "speedtest: new result"
-          git push
-
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git push origin HEAD:main
