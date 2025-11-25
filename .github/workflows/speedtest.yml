@@ -1,0 +1,27 @@
+name: Internet Speedtest & Readme Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */3 * * *" # запуск каждые 3 часа
+
+jobs:
+  speedtest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Установить speedtest-cli
+        run: pip install speedtest-cli
+
+      - name: Запустить speedtest и обновить README
+        run: |
+          python speedtest_update.py
+      - name: Commit and push if README changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet || git commit -m "speedtest: new result"
+          git push
+
