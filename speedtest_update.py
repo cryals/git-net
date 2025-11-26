@@ -1,6 +1,7 @@
 import datetime
 import subprocess
 import re
+from zoneinfo import ZoneInfo  # Для работы с часовыми поясами
 
 def get_speed():
     try:
@@ -31,7 +32,9 @@ def speed_icon(speed):
         return "🟠"
 
 def format_log_line(ping, download, upload, error_message=None):
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Указываем московский часовой пояс
+    msk_timezone = ZoneInfo("Europe/Moscow")
+    now = datetime.datetime.now(msk_timezone).strftime("%Y-%m-%d %H:%M:%S")
     icon = speed_icon(download)
     download_field = f"{download:.2f} Мбит/с" if download is not None else "-"
     upload_field = f"{upload:.2f} Мбит/с" if upload is not None else "-"
