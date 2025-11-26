@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Установить speedtest-cli
-        run: pip install speedtest-cli
+      - name: Установить зависимости Python
+        run: pip install speedtest-cli tzdata
 
       - name: Запустить speedtest и обновить README
         run: |
